@@ -19,15 +19,16 @@ def generate_recipe():
     generated_recipes = generate_recipes(api_key, user_ingredients)
 
     if generated_recipes:
-        # Extract details for the first recipe
-        recipe = generated_recipes[0]
-
-        # Get detailed recipe information, including instructions and image
-        recipe_details = get_recipe_details(api_key, recipe['id'])
+        # Get detailed recipe information for each recipe
+        recipe_details = []
+        for recipe in generated_recipes:
+            details = get_recipe_details(api_key, recipe['id'])
+            if details:
+                recipe_details.append(details)
 
         if recipe_details:
             # Pass recipe details to the HTML template
-            return render_template('recipe.html', recipe=recipe_details)
+            return render_template('recipe.html', recipes=recipe_details)
 
     # Handle the case where no recipe details are available
     return render_template('error.html')
